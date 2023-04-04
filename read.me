@@ -225,3 +225,13 @@ curl -sS https://getcomposer.org/installer | /opt/cpanel/ea-php71/root/usr/bin/p
 /opt/cpanel/ea-php71/root/usr/bin/php artisan migrate --path="/vendor/jrean/laravel-user-verification/src/resources/migrations"
 
 php artisan schedule:work // This will run a program kept in kernel.php
+
+
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
+
+git clone git@github.com:narunbabu/togata_old.git
+
+/opt/alt/php81/usr/bin/php composer.phar install
+/opt/alt/php81/usr/bin/php composer.phar dump-autoload
+/opt/alt/php81/usr/bin/php artisan migrate:refresh --seed

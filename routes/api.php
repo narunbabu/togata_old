@@ -26,7 +26,7 @@ Route::prefix('')->group(function () {
     Route::get('user', [AuthController::class, 'loadUser']); 
     Route::get('users', [UserController::class, 'getUsers']); 
 });
-
+Route::get('/images/{filename}', 'ImageController@showImage');
 // Route::post('/profiles/{field}/{value}', [ProfileController::class, 'updateField']);
 
 Route::apiResource('profile', 'App\Http\Controllers\Profile\ProfileController');
