@@ -5,25 +5,25 @@
     <body>
         <table>
             <tr>
-                <td>Dear {{$name}},</td>
+                <td> జై చౌడేశ్వరి మాతా!!! </td>
             </tr>
             <tr>
-                <td>Jai Chowdeswari Mata, Thank You For your interest in joining our community. Now, Please Click On "Confirmation Link" For Activate Your Account : </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td><a class="btn btn-primary" style="color: #6f42c1" href="{{url('confirm/'.$code) }}">Confirmation Link</a></td>
+                <td>కులబంధువులు శ్రీ {{$name}} గారికి, మన సంఘం యొక్క అనువర్తనం లో చేరడానికి మీ ఆసక్తికి ధన్యవాదాలు. ఇప్పుడు, దయచేసి "నిర్ధారించు బంధనం" పై నొక్కండి: </td>
             </tr>
             <tr>
                 <td>&nbsp;</td>
             </tr>
             <tr>
-                <td>Thank You & Regards,</td>
+                <td><a class="btn btn-primary" style="color: #6f42c1" href="{{url('api/confirm/'.$code) }}">నిర్ధారించు</a></td>
             </tr>
             <tr>
-                <td>team E-Commerce</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>ధన్యవాదములతో,</td>
+            </tr>
+            <tr>
+                <td>మీ తొగటవీరక్షత్రియ సమూహము</td>
             </tr>
         </table>
     </body>

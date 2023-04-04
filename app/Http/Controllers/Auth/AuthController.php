@@ -149,7 +149,7 @@ class AuthController extends Controller
 
             $userCount=User::where('email',$data['email'])->count();
             if($userCount>0){
-                $message="Email Already Exists!";
+                $message="Email ({$data['email']}) Already Exists!";
                 Session::flash('error_message',$message);
                 // return redirect()->back(); 
                 if(strpos($url, 'api') !== false){
@@ -184,14 +184,14 @@ class AuthController extends Controller
                 }
                 else{
                     $mail_sent = Mail::send('emails.confirmation',$messageData,function($message) use($email){
-                        $message->to($email)->subject('Confirm Your Email Account for Registration for TOGATA');
+                        $message->to($email)->subject('తొగటవీరక్షత్రియ సంఘం యొక్క అనువర్తనం లో చేరిక నిర్ధారణ');
                     });
             
                     // Check if the mail was sent successfully
                     if ($mail_sent) {
-                        $message = "Please Check Your Email account For Confirmation to Activate Your Account!";
+                        $message = "Please Check Your Email account ({$email})For Confirmation to Activate Your Account!";
                     } else {
-                        $message = "Error sending confirmation email, please try again!";
+                        $message = "Error sending confirmation email ({$email}), please try again!";
                     }
                 }
 
