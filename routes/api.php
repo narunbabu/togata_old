@@ -27,8 +27,8 @@ Route::prefix('')->group(function () {
 });
 Route::get('/confirm/{code}',[AuthController::class, 'confirmAccount']);
 Route::get('/images/{filename}', 'ImageController@showImage');
-Route::post('/confirm/{code}',[AuthController::class, 'confirmAccount']);
 // Route::post('/confirm/{code}',[AuthController::class, 'confirmAccount']);
+Route::post('/confirm/{code}',[AuthController::class, 'confirmAccount']);
 // Route::post('/profiles/{field}/{value}', [ProfileController::class, 'updateField']);
 
 Route::apiResource('profile', 'App\Http\Controllers\Profile\ProfileController');
