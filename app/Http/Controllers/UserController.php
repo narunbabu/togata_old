@@ -46,7 +46,7 @@ class UserController extends Controller
         Session::forget('error_message');
         Session::forget('success_message');
         $email = base64_decode($email);
-        return $email;
+        // return $email;
         // Check User Email Exists
 
         $userCount = User::where('email',$email)->count();
