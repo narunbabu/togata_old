@@ -90,38 +90,7 @@ class AuthController extends Controller
 
     }
 
-    // public function register(Request $request){
-    //     // return $request;
-    //     $request->validate([
-    //         'surname' => 'required|string|max:255',
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|string|email|max:255|unique:users',
-    //         'mobile'=> 'required|string|min:10',
-    //         'password' => 'required|string|min:6',
-    //     ]);
-    //     // return Hash::make($request->password);
 
-    //     $user = User::create([
-    //         'surname' => $request->surname,
-    //         'name' => $request->name,
-    //         'email' => $request->email,            
-    //         'password' => Hash::make($request->password),
-    //         'mobile' => $request->mobile,
-    //     ]);
-        
-        
-    //     $token = Auth::login($user);
-
-    //     return response()->json([
-    //         'status' => 'success',
-    //         'message' => 'User created successfully',
-    //         'user' => $user,
-    //         'authorisation' => [
-    //             'token' => $token,
-    //             'type' => 'bearer',
-    //         ]
-    //     ]);
-    // }
 
         public function register(Request $request){
         $url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -232,7 +201,8 @@ class AuthController extends Controller
         }
     }
 
-    public function confirmAccount($email){
+    public function confirm($email){
+        return $email;
         Session::forget('error_message');
         Session::forget('success_message');
         $email = base64_decode($email);

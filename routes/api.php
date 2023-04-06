@@ -18,18 +18,18 @@ use App\Http\Controllers\Profile\ProfileController;
 
 Route::prefix('')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
-    Route::post('login', [AuthController::class, 'login']);
+    // Route::post('login', [AuthController::class, 'login']);
+    Route::post('login', [AuthController::class, 'login'])->name('login');
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('user', [AuthController::class, 'loadUser']); 
     Route::get('users', [UserController::class, 'getUsers']); 
     Route::post('username', [UserController::class, 'checkUser']); 
+    Route::get('/confirm/{code}',[UserController::class, 'confirm']);
 });
-Route::get('/confirm/{code}',[AuthController::class, 'confirmAccount']);
+
 Route::get('/images/{filename}', 'ImageController@showImage');
-// Route::post('/confirm/{code}',[AuthController::class, 'confirmAccount']);
-Route::post('/confirm/{code}',[AuthController::class, 'confirmAccount']);
-// Route::post('/profiles/{field}/{value}', [ProfileController::class, 'updateField']);
+
 
 Route::apiResource('profile', 'App\Http\Controllers\Profile\ProfileController');
 Route::get('/profession/options', [ProfileController::class, 'getProfession']);
@@ -37,10 +37,6 @@ Route::get('/{action}/options', [ProfileController::class, 'handleAction']);
 Route::post('/profile/{field}/upload', [ProfileController::class, 'upload']);
 Route::post('/profile/{field}', [ProfileController::class, 'updateField']);
 Route::post('/profession', [ProfileController::class, 'storeNewprofession']);
-
-
-// Route::get('/profile/{id}/cover-photo', [ProfileController::class, 'getCoverPhoto']);
-
 
 
 Route::prefix('tweets')->group(function () {
@@ -62,13 +58,6 @@ Route::prefix('/users')->group(function () {
     Route::post('/follow/{user}', [UserFollowController::class, 'follow'])->name('follow');
     Route::post('/unfollow/{user}', [UserFollowController::class, 'unfollow'])->name('unfollow');
 });
-// Route::controller(StateMandalController::class)->group(function () {
-//     Route::get('states', 'fetchState');
-//     Route::get('districts', 'fetchDistrict');
-//     Route::get('mandals', 'fetchMandal');
-//     Route::get('villages', 'fetchVillage');
-//     // Route::get('village', 'show');   
-// });
 
 Route::prefix('')->group(function () {
     Route::get('states', [StateMandalController::class, 'fetchState']);
@@ -78,7 +67,6 @@ Route::prefix('')->group(function () {
     Route::post('village', [VillageController::class, 'store']);   
 });
 
-// Route::get('/states', [StateMandalController::class, 'fetchState']);
 Route::controller(VillageController::class)->group(function () {
     Route::post('village/create', 'store');
     Route::get('village', 'show');

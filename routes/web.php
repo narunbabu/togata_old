@@ -23,8 +23,9 @@ Route::post('/register', [UserController::class, 'registerUser']);
 
 Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('auth.logout');
 // Confirm Account
-Route::get('/confirm/{code}',[UserController::class, 'confirmAccount']);
-Route::post('/confirm/{code}',[AuthController::class, 'confirmAccount']);
+// Route::get('/confirm/{code}',[AuthController::class, 'confirmAccount']);
+Route::get('/confirm/{code}',[UserController::class, 'confirm']);
+// Route::post('/confirm/{code}',[AuthController::class, 'confirmAccount']);
 
 // Forgot Password
 Route::get('/forgot/password',[UserController::class, 'forgotPassword']);
