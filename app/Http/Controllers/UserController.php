@@ -23,6 +23,23 @@ class UserController extends Controller
     
         return response()->json($users);
     }
+    public function checkUser(Request $request){
+
+        $user = $request->user();
+
+        $users = User::
+        select('username')
+        ->where('username', '=', $request->username)
+        ->get();
+
+            if ($users->isEmpty()) {
+                // The username is available
+                return response()->json(['message' => 'This username is available.','available'=>true]);
+            } else {
+                // The username is already taken
+                return response()->json(['message' => 'This username is already taken.','available'=>false]);
+            }
+    }
     
     // public function loginRegister(){
     //     return view('home.login_register');

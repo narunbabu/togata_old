@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
-
+use App\Models\ProfileRelated\Profile;
 
 use App\Models\TweetRelated\Tweet;
 use App\User;
@@ -43,7 +43,17 @@ class AuthController extends Controller
         $userData['following_count'] = $followingCount;
         // $userData['avatar']  =asset($user->profile()->avatar);
         $profile = $user->profile;
-        $userData['avatar'] = asset($profile->avatar);
+        // Check if the profile exists
+        $profile = $user->profile;
+        if ($profile) {
+            $userData['avatar'] = asset($profile->avatar);
+        } else {
+            // Provide a default value for the avatar
+            // $userData['avatar'] = asset('path/to/default/avatar.png');
+            $userData['avatar'] = asset('images/avatar/dummy.webp');
+        }
+
+        // $userData['avatar'] = asset($profile->avatar);
         return response()->json(['user' => $userData]);
 
     } catch (\Exception $e) {
@@ -113,8 +123,9 @@ class AuthController extends Controller
     //     ]);
     // }
 
-        public function registerUser(Request $request){
+        public function register(Request $request){
         $url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        // return $request;
 
         if($request->isMethod('post')){
             Session::forget('error_message');
@@ -180,7 +191,8 @@ class AuthController extends Controller
 
                 
                 if(strpos($url, ':8000') !== false){
-                   
+                    $mail_sent=true;
+                    $message = "Test! Mail not sent to ({$email}) You need to manually edit database to put status 1";
                 }
                 else{
                     $mail_sent = Mail::send('emails.confirmation',$messageData,function($message) use($email){
@@ -196,10 +208,6 @@ class AuthController extends Controller
                 }
 
 
-                // $message="Please Check Your Email account For Confirmation to Activate Your Account!";
-                // Session::put('success_message',$message);
-
-
                 if(strpos($url, 'api') !== false){
                     if ($mail_sent) {
                         return response()->json(['info'=>['status'=>'Success','message'=>$message,'email'=> $data['email']]]);
@@ -208,6 +216,7 @@ class AuthController extends Controller
                     }
                 }
                 else{
+                    
                     if ($mail_sent) {
                         Session::put('success_message',$message);
                     } else {
@@ -216,13 +225,7 @@ class AuthController extends Controller
                     return redirect()->back();
                 }
 
-                // if(strpos($url, 'api') !== false){
-                //     // return ['info'=>['message'=>$message,'email'=> $data['email']]];
-                //     return response()->json(['info'=>['status'=>'Success','message'=>$message,'email'=> $data['email']]]);
-                // }
-                // else{
-                //     return response()->json(['info'=>['status'=>'Error','message'=>'Email already registered']]);
-                // }
+
 
 
             }
@@ -252,6 +255,8 @@ class AuthController extends Controller
                          Mail::send('emails.register',$messageData,function($message) use($email){
                              $message->to($email)->subject('Welcome to Our E-Commerce');
                         });
+
+                        $profile = Profile::firstOrCreate(['user_id' =>$userDetails->id]);
 
                     //redirect to login/register with success page
                     $message = " Your Account is Activated. You Can Login Now!";

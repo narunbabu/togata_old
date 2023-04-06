@@ -75,21 +75,19 @@ class VillageController extends Controller
 
     {
         // echo "on the command line";
-        return $request;
+        // return response()->json($request->all());
         $user=Auth::user();
-        // return $user;
-        // return response()->json(Auth::user());
-        // $post_data = $request->all();
-        // return $post_data;
-        // if ($user->tokenCan('post:update'))
-        if (! Gate::allows('village_create')) 
-        {
-            return abort(401);
-        }
+        // if (! Gate::allows('village_create')) 
         // {
-        // return $request->all()+ ['created_by_id' => Auth::user()->id];
+        //     return abort(401);
+        // }
+
         try{
-           Village::create($request->all()+ ['created_by_id' => $user->id]);
+        //    Village::create($request->all()+ ['created_by_id' => $user->id]);
+
+            \App\Models\PlaceRelated\Village::create($request->all()+ ['created_by_id' => $user->id]);
+
+
         }catch(\Illuminate\Database\QueryException $e){
             return ['error'=>$e->getMessage()];
         }

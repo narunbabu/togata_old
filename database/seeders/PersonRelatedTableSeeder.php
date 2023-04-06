@@ -35,31 +35,30 @@ class PersonRelatedTableSeeder extends Seeder
             ['id' => 8, 'name' => 'Undeducated'],
         ];
         foreach ($items as $item) {
-            \App\Models\Qualification::create($item);
+            \App\Models\ProfileRelated\Qualification::create($item);
         }
 
-        $items = [
-            
-            ['id' => 1, 'name' => 'Gvt. Job'],
-            ['id' => 2, 'name' => 'Pvt. Job'],
-            ['id' => 3, 'name' => 'Business/Company/Shop'],
-            ['id' => 4, 'name' => 'Farmer'],
-            ['id' => 5, 'name' => 'Agri Labour/ Cooli'],            
-            ['id' => 6, 'name' => 'Building Contractor'],
-            ['id' => 7, 'name' => 'Building Labour'],
-            ['id' => 8, 'name' => 'Shop Labour'],
-            ['id' => 9, 'name' => 'Auto/Vehicle Driver'],
-            ['id' => 10, 'name' => 'Auto Driver'],
-            ['id' => 11, 'name' => 'Other'],
-            ['id' => 12, 'name' => 'Unemployed'],
-            ['id' => 13, 'name' => 'Not Applicable'],
+        // $items = [
+        //         ['id' => 1, 'name' => 'Government Employee'],
+        //         ['id' => 2, 'name' => 'Private Employee'],
+        //         ['id' => 3, 'name' => 'Business/Company/Shop'],
+        //         ['id' => 4, 'name' => 'Farmer/Cheneta'],
+        //         ['id' => 5, 'name' => 'Realestate/Building Contractor'],
+        //         ['id' => 6, 'name' => 'Daily wage Worker/Driver (Shop,Building,Agri etc)'],
+        //         ['id' => 7, 'name' => 'Media/Youtube/Insta Influencer'],
+        //         ['id' => 8, 'name' => 'Freelancer/Self-employed'], 
+        //         ['id' => 9, 'name' => 'Other'],               
+        //         ['id' => 10, 'name' => 'House wife'],
+        //         ['id' => 11, 'name' => 'Student'],
+        //         ['id' => 12, 'name' => 'Retired'],
+        //         ['id' => 13, 'name' => 'Unemployed'],
+        //         ['id' => 14, 'name' => 'Not Applicable'],    
+        // ];
+        // foreach ($items as $item) {
+        //     \App\Models\Profession::create($item);
+        // }
 
-        ];
-        foreach ($items as $item) {
-            \App\Models\Profession::create($item);
-        }
-
-
+        
         $items = [
             
             ['id' => 1, 'name' => 'Sr. Citizen'],

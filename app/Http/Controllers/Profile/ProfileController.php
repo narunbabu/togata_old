@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Profile;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 use App\Models\ProfileRelated\Profile;
 use Illuminate\Support\Facades\Auth;
 use App\User;
@@ -16,13 +17,36 @@ class ProfileController extends Controller
     {
         $this->middleware('auth:api', ['except' => []]);
     }
-
-
-
-
-    public function show(int $uid)
+    //http://127.0.0.1:8000/api/profile/3
+    public function show(int $uid) 
     {
-        $profile = Profile::where('user_id', $uid)->first();
+        // $profile = Profile::where('user_id', $uid)->first();
+        $profile = Profile::firstOrCreate(['user_id' => $uid]);
+
+        if (!$profile) {
+            // If the profile is not found, load the user
+            $user = User::find($uid);
+
+            if (!$user) {
+                // If the user is not found, return an error response
+                return response()->json(['error' => 'User not found'], 404);
+            }
+
+            // Create an array containing the user's basic information
+            $defaultProfileData = [
+                'user_id' => $user->id,
+                'surname' => ucwords($user->surname),
+                'name' => ucwords($user->name),
+                'username' => $user->username,
+                'mobile' => $user->mobile,
+                'email' => $user->email,
+                'avatar' => asset('images/avatar.jpg'), // Default avatar
+            ];
+
+            // Return the user's basic information as a JSON object
+            return response()->json($defaultProfileData);
+        }
+
         return response()->json($profile);
     }
 
@@ -35,6 +59,23 @@ class ProfileController extends Controller
         $profile->save();
         return response()->json(['message' => 'Profile updated successfully.']);
     }
+
+    public function storeNewprofession(Request $request)
+    {
+        $user = Auth::user();
+        // $profile = Profile::where('user_id', $user->id)->first();
+        // ['created_by_id'=>$user->id, 'category_id' => $request->category_id, 
+        // 'name' => $request->category_id],
+        
+        try{
+            \App\Models\ProfileRelated\AllProfession::create($request->all()+ ['created_by_id' => $user->id]);
+            }catch(\Illuminate\Database\QueryException $e){
+                return ['error'=>$e->getMessage()];
+            }
+        return response()->json(\App\Models\ProfileRelated\AllProfession::where('name',$request->name)->first());
+        // return response()->json(['message' => 'Profile updated successfully.']);
+    }
+
     public function getMarried($action) {
         
             $mappedArray[] = ['label' => 'Married','value' => true,];
@@ -42,21 +83,57 @@ class ProfileController extends Controller
        
         return response()->json($mappedArray);
     }
+    function convertArray2LabelValues($contents){
+        foreach ($contents as $value) {
+            $mappedArray[] = [
+                'label' => $value->name,
+                'value' => $value->id,
+            ];
+        } 
+        return $mappedArray;
+    }
     public function getGender ($action) {
         $user = Auth::user();
         $profile = $user->profile;
-        return $profile->getStatusEnumValues($action);
+        // return $profile->getStatusEnumValues($action);
         $contents = $profile->getStatusEnumValues($action);
-        $mappedArray = [];
-
+        // $mappedArray = [];
         foreach ($contents as $value) {
             $mappedArray[] = [
                 'label' => $value,
                 'value' => $value,
             ];
-        }    
-        return response()->json($mappedArray);
+        } 
+        // return $mappedArray;
+
+           
+        return response()->json( $mappedArray);
     }
+    public function getEducation ($action) {
+        $contents = \App\Models\ProfileRelated\Qualification::select('id','name')->get();
+        // $mappedArray = [];
+        // foreach ($contents as $value) {
+        //     $mappedArray[] = [
+        //         'label' => $value->name,
+        //         'value' => $value->id,
+        //     ];
+        // }    
+        return response()->json($this->convertArray2LabelValues($contents));
+    }
+
+    public function getProfession_category ($action) {
+        $contents = \App\Models\ProfileRelated\ProfessionCategory::select('id','name')->get();
+    
+        return response()->json($this->convertArray2LabelValues($contents));
+    }
+    public function getProfession (Request $request) {
+        // return $request;
+        $contents = \App\Models\ProfileRelated\AllProfession::where("category_id",$request->category_id)->select('id','name')->get();
+        // return $contents;
+        return response()->json($this->convertArray2LabelValues($contents));
+    }
+
+
 
 
     public function handleAction($action) {
@@ -64,7 +141,11 @@ class ProfileController extends Controller
         $methodName = 'get' . ucfirst($action);
     
         if (method_exists($this, $methodName)) {
-            return $this->{$methodName}($action);
+            // if ($action=='profession') {return $this->{$methodName}(Request $action);}
+            // else {
+                return $this->{$methodName}($action);
+            // }
+            
         } else {
             abort(404);
         }
@@ -145,41 +226,20 @@ class ProfileController extends Controller
         ]);
     }
 
-    // public function saveDateOfBirth(Request $request, $id)
-    // {
-    //     $user = User::find($id);
 
-    //     if (!$user) {
-    //         return response()->json(['error' => 'User not found'], 404);
-    //     }
 
-    //     $profile = $user->profile ?? new Profile(['user_id' => $id]);
-    //     $profile->date_of_birth = $request->input('date_of_birth');
-    //     $profile->save();
-
-    //     return response()->json(['message' => 'Date of birth saved successfully'], 200);
-    // }
-    // public function updateField($field, $value)
-    // {
-    //     // Find the currently authenticated user's profile
-    //     $profile = auth()->user()->profile;
-        
-    //     // Update the specified field with the given value
-    //     $profile->{$field} = $value;
-        
-    //     // Save the changes
-    //     $profile->save();
-        
-    //     // Return a success response
-    //     return response()->json(['message' => 'Field updated successfully']);
-    // }
 
     public function updateField(Request $request, $field)
     {
         // return $request;
         $user = $request->user();
         $profile = $user->profile;
-
+        $altfield=$field;
+        if ($field=='username'){
+            $user->{$field} = $request->input('value');
+            $user->save();
+            return response()->json( [$field =>$user->{$field} ]);
+        }
         
         
         switch ($field) {
@@ -188,7 +248,9 @@ class ProfileController extends Controller
                 // $profile->native_place_id = $request->input('value');
                 break;
             case 'work_place':
+
                 $field='work_place_id';
+                
                 // $profile->work_place_id = $request->input('value');
                 break;
             case 'education':
@@ -198,28 +260,7 @@ class ProfileController extends Controller
             case 'profession':
                 $field='profession_id';
                 // $profile->profession_id = $request->input('value');
-        //         break;
-        //     case 'about_work':
-        //         $profile->about_work = $request->input('value');
-        //         break;
-        //     case 'work_experience':
-        //         $profile->work_experience = $request->input('value');
-        //         break;
-        //     case 'interests':
-        //         $profile->interests = $request->input('value');
-        //         break;
-        //     case 'twitter_handle':
-        //         $profile->twitter_handle = $request->input('value');
-        //         break;
-        //     case 'linkedin_handle':
-        //         $profile->linkedin_handle = $request->input('value');
-        //         break;
-        //     case 'facebook_handle':
-        //         $profile->facebook_handle = $request->input('value');
-        //         break;
-        //     case 'instagram_handle':
-        //         $profile->instagram_handle = $request->input('value');
-        //         break;
+       
             default:
                 $field=$field;
                 break;
@@ -227,8 +268,32 @@ class ProfileController extends Controller
                 // return response()->json(['error' => 'value'], 400);
         }
         $profile->{$field} = $request->input('value');
+
         $profile->save();
-        return response()->json([$field => $profile->{$field}]);
+        
+        switch ($altfield) {
+            case 'native_place':
+                $altvalue=$profile->getNativePlace();
+                
+                break;
+            case 'work_place':
+
+                $altvalue=$profile->getWorkPlace();
+                
+                
+                break;
+            case 'education':
+                $altvalue=$profile->education->name;
+                
+                break;
+            case 'profession':
+                $altvalue=$profile->profession->name;
+            default:
+                $altvalue=$profile->{$field};
+                break;
+            }
+            // [$field => $profile->{$field}],
+        return response()->json([$altfield =>$altvalue ]);
     }
 }
 

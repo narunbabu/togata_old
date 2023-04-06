@@ -15,12 +15,14 @@ class CreateProfessionsCategoriesTable extends Migration
         Schema::create('profession_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('created_by_id')->references('id')->on('users');
             $table->timestamps();
         });
 
         Schema::create('all_professions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('created_by_id')->references('id')->on('users');
             $table->foreignId('category_id')->constrained('profession_categories');
             $table->timestamps();
         });

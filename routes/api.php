@@ -12,27 +12,31 @@ use App\Http\Controllers\Twitt\TweetController;
 use App\Http\Controllers\Twitt\TweetLikeController;
 use App\Http\Controllers\Twitt\RetweetController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserFollowController;
 use App\Http\Controllers\Profile\ProfileController;
-
-// Route::post('register', [UserController::class, 'registerUser']);
-
 
 
 Route::prefix('')->group(function () {
-    Route::post('register', [AuthController::class, 'registerUser']);
+    Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('user', [AuthController::class, 'loadUser']); 
     Route::get('users', [UserController::class, 'getUsers']); 
+    Route::post('username', [UserController::class, 'checkUser']); 
 });
 Route::get('/images/{filename}', 'ImageController@showImage');
+Route::post('/confirm/{code}',[AuthController::class, 'confirmAccount']);
 // Route::post('/profiles/{field}/{value}', [ProfileController::class, 'updateField']);
 
 Route::apiResource('profile', 'App\Http\Controllers\Profile\ProfileController');
+Route::get('/profession/options', [ProfileController::class, 'getProfession']);
 Route::get('/{action}/options', [ProfileController::class, 'handleAction']);
 Route::post('/profile/{field}/upload', [ProfileController::class, 'upload']);
 Route::post('/profile/{field}', [ProfileController::class, 'updateField']);
+Route::post('/profession', [ProfileController::class, 'storeNewprofession']);
+
+
 // Route::get('/profile/{id}/cover-photo', [ProfileController::class, 'getCoverPhoto']);
 
 
@@ -69,7 +73,7 @@ Route::prefix('')->group(function () {
     Route::get('districts', [StateMandalController::class, 'fetchDistrict']);
     Route::get('mandals', [StateMandalController::class, 'fetchMandal']);
     Route::get('villages', [StateMandalController::class, 'fetchVillage']);
-    // Route::get('village', [StateMandalController::class, 'show']);   
+    Route::post('village', [VillageController::class, 'store']);   
 });
 
 // Route::get('/states', [StateMandalController::class, 'fetchState']);

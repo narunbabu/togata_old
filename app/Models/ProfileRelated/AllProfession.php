@@ -12,6 +12,7 @@ class AllProfession extends Model
     protected $fillable = [
         'name',
         'category_id',
+        'created_by_id',
     ];
 
     public function category()

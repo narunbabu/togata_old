@@ -40,6 +40,12 @@ class StateMandalController extends Controller
         $data = Village::where("mandal_id",$request->mandal_id)->get(["name", "id"]);
         return response()->json($data);
     }
+    public function storeVillage(Request $request)
+    {
+        // return $request;
+        $data = Village::where("mandal_id",$request->mandal_id)->get(["name", "id"]);
+        return response()->json($data);
+    }
 
     public function show(Request $request)
     {

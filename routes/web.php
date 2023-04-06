@@ -14,7 +14,7 @@ Route::get('/', function () {
 
 Route::get('/images/{filename}', 'ImageController@showImage');
 // Auth::routes();
-Route::get('/login-register', ['as'=>'login','uses'=> 'App\Http\Controllers\UserController@loginRegister']);
+// Route::get('/login-register', ['as'=>'login','uses'=> 'App\Http\Controllers\UserController@loginRegister']);
 Route::post('/login2', [UserController::class, 'loginUser']);
 // Route::controller(AuthController::class)->group(function () {
 //     Route::post('login2', 'login');
@@ -24,7 +24,7 @@ Route::post('/register', [UserController::class, 'registerUser']);
 Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('auth.logout');
 // Confirm Account
 Route::get('/confirm/{code}',[UserController::class, 'confirmAccount']);
-Route::post('/confirm/{code}',[UserController::class, 'confirmAccount']);
+Route::post('/confirm/{code}',[AuthController::class, 'confirmAccount']);
 
 // Forgot Password
 Route::get('/forgot/password',[UserController::class, 'forgotPassword']);

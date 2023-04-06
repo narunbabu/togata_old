@@ -10,7 +10,7 @@ class ProfessionCategory extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'name','created_by_id'
     ];
 
     public function professions()

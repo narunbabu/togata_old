@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Models\ProfilesRelated\ProfessionCategory;
 use App\Models\PlaceRelated\Village;
-use App\Models\Qualification;
+use App\Models\ProfileRelated\Qualification;
 use Illuminate\Support\Facades\DB;
 class Profile extends Model
 {
@@ -72,6 +72,29 @@ class Profile extends Model
         }
         return $enum;
     }
+    public function getNativePlace()
+    {
+        // return 
+        // $this->nativePlace->name.', \n'.$this->nativePlace->mandal->name.' (M), \n'.
+        //                         $this->nativePlace->mandal->district->name.' (D)';
+
+        if ($this->nativePlace) {
+            return $this->nativePlace->name . ', \n' . $this->nativePlace->mandal->name . ' (M), \n' . $this->nativePlace->mandal->district->name . ' (D)';
+        } else {
+            return 'Not available';
+        }
+    }
+    public function getWorkPlace()
+    {
+
+        
+        if ($this->workPlace) {
+            return $this->workPlace->name.'\n'.$this->workPlace->mandal->name.' (M), \n'.
+            $this->workPlace->mandal->district->name.' (D) ';
+        } else {
+            return 'Not available';
+        }
+    }
 
     public function toArray()
     {
@@ -81,14 +104,33 @@ class Profile extends Model
         $array['username'] = $this->user->username;
         $array['mobile'] = $this->user->mobile;
         $array['email'] = $this->user->email;
-        $array['native_place'] = $this->nativePlace->name.', \n'.$this->nativePlace->mandal->name.' (M), \n'.
-                                $this->nativePlace->mandal->district->name.' (D)';
-        $array['work_place'] = $this->workPlace->name.'\n'.$this->workPlace->mandal->name.' (M), \n'.
-                                $this->workPlace->mandal->district->name.' (D) ';
-        $array['education'] = $this->education->name;
-        $array['profession'] = $this->profession->name;
+        $array['native_place'] = $this->getNativePlace();
+        $array['work_place'] = $this->getWorkPlace();
+        if ($this->education) {
+            $array['education'] = $this->education->name;
+        } else {
+            $array['education'] = 'Not available';
+        }
+        if ($this->profession) {
+            $array['profession'] = $this->profession->name;
+        } else {
+            $array['profession'] = 'Not available';
+        }
+
+
+        if ($this->cover_photo) {
+            $array['cover_photo'] = $this->cover_photo;
+        } else {
+            $array['cover_photo'] = asset('images/1679701536.jpg'); asset('images/avatar/dummy.webp');
+        }
+        if ($this->avatar) {
+            $array['avatar'] =asset($this->avatar);
+        } else {
+            $array['avatar'] = asset('images/avatar/dummy.webp');
+        }
+
         $array['cover_photo'] =asset($this->cover_photo);
-        $array['avatar'] =asset($this->avatar);
+        
 
         return $array;
     }
