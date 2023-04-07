@@ -15,7 +15,7 @@ Route::get('/', function () {
 Route::get('/images/{filename}', 'ImageController@showImage');
 // Auth::routes();
 // Route::get('/login-register', ['as'=>'login','uses'=> 'App\Http\Controllers\UserController@loginRegister']);
-Route::post('/login2', [UserController::class, 'loginUser']);
+Route::post('/login', [UserController::class, 'loginRegister']);
 // Route::controller(AuthController::class)->group(function () {
 //     Route::post('login2', 'login');
 // });

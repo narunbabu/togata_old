@@ -16,13 +16,33 @@ use App\Models\ProfileRelated\Profile;
 class UserController extends Controller
 {
     public function getUsers(){
-        $user = auth()->user();
-        $users = User::
-            select('id','surname', 'name','avatar','username')
-            ->where('id', '!=', $user->id)
-            ->get();
+        // $user = auth()->user();
+        // $users = User::
+        //     select('id','surname', 'name','avatar','username')
+        //     ->where('id', '!=', $user->id)
+        //     ->get();
     
-        return response()->json($users);
+        // return response()->json($users);
+
+
+        $user = auth()->user();
+
+        if ($user === null) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+        
+    $users = User::with('profile:id,user_id,avatar')
+        ->select('id', 'surname', 'name', 'username')
+        ->where('id', '!=', $user->id)
+        ->get();
+
+        foreach ($users as $u) {
+            if ($u->profile->avatar === null) {
+                $u->profile->avatar = asset('images/avatar/dummy.webp');
+            }
+        }
+
+    return response()->json($users);
     }
     public function checkUser(Request $request){
 
@@ -56,7 +76,7 @@ class UserController extends Controller
              if($userDetails->status==1){
                  $message = "Your Account is Already Activated. Please Login.";
                  Session::put('error_message',$message);
-                 return redirect('/login-register');
+                 return redirect('/login');
              }else{
                  // Update User Status to 1 to Activate Account
                  User::where('email',$email)->update(['status'=>1]);
@@ -78,9 +98,9 @@ class UserController extends Controller
         }
 
     }
-    // public function loginRegister(){
-    //     return view('home.login_register');
-    // }
+    public function loginRegister(){
+        return view('home.login_register');
+    }
 
     // public function registerUser(Request $request){
     //     $url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
