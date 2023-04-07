@@ -16,33 +16,33 @@ use App\Models\ProfileRelated\Profile;
 class UserController extends Controller
 {
     public function getUsers(){
-        // $user = auth()->user();
-        // $users = User::
-        //     select('id','surname', 'name','avatar','username')
-        //     ->where('id', '!=', $user->id)
-        //     ->get();
-    
-        // return response()->json($users);
-
-
         $user = auth()->user();
 
         if ($user === null) {
             return response()->json(['message' => 'User not authenticated'], 401);
         }
 
-    $users = User::with('profile:id,user_id,avatar')
-        ->select('id', 'surname', 'name', 'username')
-        ->where('id', '!=', $user->id)
-        ->get();
+    // $users = User::
+    // // with('profile:id,user_id') //avatar
+    //     // ->
+    //     select('id', 'surname', 'name', 'username')
+    //     ->where('id', '!=', $user->id)
+    //     ->get();
 
-        foreach ($users as $u) {
-            if ($u->profile->avatar === null) {
-                $u->profile->avatar = asset('images/avatar/dummy.webp');
-            }
+        $users = User::select('id', 'surname', 'name', 'username')->where('id', '!=', $user->id)->get();
+        // return  $users;
+
+        // foreach ($users as $u) {
+        //     if ($u->profile->avatar === null) {
+        //         $u->profile->avatar = asset('images/avatar/dummy.webp');
+        //     }
+        // }
+        foreach ($users as $user) {
+            $properUsers[] = $user->properUser();
         }
+    
+        return response()->json($properUsers);
 
-    return response()->json($users);
     }
     public function checkUser(Request $request){
 

@@ -129,7 +129,7 @@ class Profile extends Model
             $array['avatar'] = asset('images/avatar/dummy.webp');
         }
 
-        $array['cover_photo'] =asset($this->cover_photo);
+        // $array['cover_photo'] =asset($this->cover_photo);
         
 
         return $array;

@@ -92,5 +92,21 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsToMany(Tweet::class, 'mentions');
     }
+
+    public function properUser()
+    {
+        $array = parent::toArray(); 
+        // if ($this->profile->cover_photo) {
+        //     $array['cover_photo'] = $this->profile->cover_photo;
+        // } else {
+        //     $array['cover_photo'] = asset('images/1679701536.jpg'); asset('images/avatar/dummy.webp');
+        // }
+        if ($this->profile->avatar) {
+            $array['avatar'] =asset($this->profile->avatar);
+        } else {
+            $array['avatar'] = asset('images/avatar/dummy.webp');
+        }
+        return $array;
+    }
     
 }
