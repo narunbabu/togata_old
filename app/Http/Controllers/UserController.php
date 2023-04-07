@@ -74,9 +74,12 @@ class UserController extends Controller
              // User Email is already activated or not
              $userDetails=User::where('email',$email)->first();
              if($userDetails->status==1){
-                 $message = "Your Account is Already Activated. Please Login.";
-                 Session::put('error_message',$message);
-                 return redirect('/login');
+                 $message = "Your Account is Already Activated. Please Login in app.";
+                 Session::put('success_message',$message);
+                //  return redirect('/login');
+
+
+                    return view('home.success');
              }else{
                  // Update User Status to 1 to Activate Account
                  User::where('email',$email)->update(['status'=>1]);
