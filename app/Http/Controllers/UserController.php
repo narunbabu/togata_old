@@ -30,7 +30,7 @@ class UserController extends Controller
         if ($user === null) {
             return response()->json(['message' => 'User not authenticated'], 401);
         }
-        
+
     $users = User::with('profile:id,user_id,avatar')
         ->select('id', 'surname', 'name', 'username')
         ->where('id', '!=', $user->id)
@@ -91,7 +91,7 @@ class UserController extends Controller
                     //redirect to login/register with success page
                     $message = " Your Account is Activated. You Can Login Now!";
                     Session::put('success_message',$message);
-                    return redirect('/login-register');
+                    return view('home.success');
              }
         }else{
             abort(404);
