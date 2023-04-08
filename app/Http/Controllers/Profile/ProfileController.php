@@ -111,13 +111,7 @@ class ProfileController extends Controller
     }
     public function getEducation ($action) {
         $contents = \App\Models\ProfileRelated\Qualification::select('id','name')->get();
-        // $mappedArray = [];
-        // foreach ($contents as $value) {
-        //     $mappedArray[] = [
-        //         'label' => $value->name,
-        //         'value' => $value->id,
-        //     ];
-        // }    
+ 
         return response()->json($this->convertArray2LabelValues($contents));
     }
 
@@ -152,35 +146,6 @@ class ProfileController extends Controller
     }
 
 
-//     public function edit()
-// {
-//     $user = Auth::user();
-//     $profile = $user->profile;
-
-//     return  compact('profile');
-// }
-    // public function saveCoverPhoto(Request $request, $id)
-    // {
-    //     $user = User::find($id);
-
-    //     if (!$user) {
-    //         return response()->json(['error' => 'User not found'], 404);
-    //     }
-
-    //     if (!$request->hasFile('cover_photo')) {
-    //         return response()->json(['error' => 'No cover photo provided'], 400);
-    //     }
-
-    //     $coverPhoto = $request->file('cover_photo');
-    //     $filename = time() . '_' . $coverPhoto->getClientOriginalName();
-    //     $path = $coverPhoto->storeAs('public/cover_photos', $filename);
-
-    //     $profile = $user->profile ?? new Profile(['user_id' => $id]);
-    //     $profile->cover_photo = $filename;
-    //     $profile->save();
-
-    //     return response()->json(['message' => 'Cover photo saved successfully'], 200);
-    // }
 
     public function upload(Request $request,$field)
     {
@@ -294,6 +259,7 @@ class ProfileController extends Controller
             }
             // [$field => $profile->{$field}],
         return response()->json([$altfield =>$altvalue ]);
+        // return response()->json( [$field =>$user->{$field} ]);
     }
 }
 
