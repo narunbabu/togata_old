@@ -60,7 +60,7 @@ class Tweet extends Model
         $array['type'] = $this->type->name;
         $array['user'] = ucwords($this->user->surname.' '.$this->user->name);
         $array['userName'] = $this->user->username;
-        $array['avatar'] = $this->user->avatar;
+        $array['avatar'] = asset($this->user->profile->avatar);
         $array['message'] = $this->message;        
         $array['likes'] = $this->likes()->count();
         $array['retweets'] = $this->retweets()->count();
