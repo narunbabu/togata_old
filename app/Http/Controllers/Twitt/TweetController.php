@@ -98,7 +98,7 @@ public function getNewTweets(int $from_tweet_id)
         $tweet->user_id = auth()->id();
         $tweet->type_id = $request->input('type_id');
         $tweet->save();
-        return $tweet;
+        // return $tweet;
 
         if ($tweet->type_id==3){
             $comment = new Comment();
