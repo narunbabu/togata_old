@@ -29,7 +29,10 @@ class UserController extends Controller
     //     ->where('id', '!=', $user->id)
     //     ->get();
 
-        $users = User::select('id', 'surname', 'name', 'username')->where('id', '!=', $user->id)->get();
+    $users = User::select('id', 'surname', 'name', 'username')
+    ->where('id', '!=', $user->id)
+    ->take(50)
+    ->get();
         // return  $users;
 
         // foreach ($users as $u) {

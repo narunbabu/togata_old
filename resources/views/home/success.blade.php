@@ -19,9 +19,10 @@
                         <p class="lead">
                             {{ Session::get('success_message') }}
                         </p>
-                        <p>
-                            <a href="{{ url('/login') }}" class="btn btn-primary">Login</a>
-                        </p>
+                        
+                            <!-- <a href="" class="btn btn-primary">Login</a> -->
+                            <h2>Go to your MOBILE APP and SignIn there</h2>
+                        
                     </div>
                 </div>
             </div>

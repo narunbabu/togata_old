@@ -87,15 +87,18 @@ public function getNewTweets(int $from_tweet_id)
 
     public function store(Request $request)
     {        
+        // return $request;
         $validatedData = $request->validate([
-            'message' => 'required|max:280',
+            // 'message' => 'required|max:280',
             'type_id' => 'required|integer'
         ]);
+
         $tweet = new Tweet();
         $tweet->message = $request->input('message');
         $tweet->user_id = auth()->id();
         $tweet->type_id = $request->input('type_id');
         $tweet->save();
+        return $tweet;
 
         if ($tweet->type_id==3){
             $comment = new Comment();
