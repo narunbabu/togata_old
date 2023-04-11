@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 
 class ProfileController extends Controller
@@ -33,14 +35,19 @@ class ProfileController extends Controller
             }
 
             // Create an array containing the user's basic information
+            if ($user->profile->avatar) {
+                $avatar =asset($user->profile->avatar);
+            } else {
+                $avatar  = asset('images/avatar/dummy.webp');
+            }
             $defaultProfileData = [
                 'user_id' => $user->id,
                 'surname' => ucwords($user->surname),
                 'name' => ucwords($user->name),
                 'username' => $user->username,
                 'mobile' => $user->mobile,
-                'email' => $user->email,
-                'avatar' => asset('images/avatar.jpg'), // Default avatar
+                'email' => $user->email,                
+                'avatar' =>  $avatar , // Default avatar
             ];
 
             // Return the user's basic information as a JSON object
@@ -135,11 +142,7 @@ class ProfileController extends Controller
         $methodName = 'get' . ucfirst($action);
     
         if (method_exists($this, $methodName)) {
-            // if ($action=='profession') {return $this->{$methodName}(Request $action);}
-            // else {
-                return $this->{$methodName}($action);
-            // }
-            
+                return $this->{$methodName}($action);   
         } else {
             abort(404);
         }
@@ -147,29 +150,57 @@ class ProfileController extends Controller
 
 
 
-    public function upload(Request $request,$field)
+    // public function upload(Request $request,$field)
+    // {
+    //     $request->validate([
+    //         'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    //     ]);
+    //     $imageName = time() . '.' . $request->image->extension();
+    //     $request->image->move(public_path('images'), $imageName);
+
+    //     $user = Auth::user();
+    //     $profile = $user->profile;
+    //     $profile->{$field} = 'images/' . $imageName;
+    //     $profile->save();
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Image uploaded and saved successfully',
+    //         'file_path' => 'images/' . $imageName,
+    //     ]);
+    // }
+    public function upload(Request $request, $field)
     {
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $imageName = time() . '.' . $request->image->extension();
+        // Generate a random string for the image name
+        $imageName = Str::random(10) . '.' . $request->image->extension();
 
-        $request->image->move(public_path('images'), $imageName);
-
-        // Store the image path in the profiles table
         $user = Auth::user();
         $profile = $user->profile;
 
+        // Check if there is a previous image and delete it
+        $previousImage = $profile->{$field};
+        if ($previousImage) {
+            $previousImagePath = public_path($previousImage);
+            if (File::exists($previousImagePath)) {
+                File::delete($previousImagePath);
+            }
+        }
 
+        // Upload the new image
+        $request->image->move(public_path('images/'.$field.'/'), $imageName);
 
-        $profile->{$field} = 'images/' . $imageName;
+        // Update the user's profile with the new image
+        $profile->{$field} = 'images/'.$field.'/' . $imageName;
         $profile->save();
 
         return response()->json([
             'success' => true,
             'message' => 'Image uploaded and saved successfully',
-            'file_path' => 'images/' . $imageName,
+            'file_path' => asset($profile->{$field}),
         ]);
     }
 
@@ -206,7 +237,7 @@ class ProfileController extends Controller
             return response()->json( [$field =>$user->{$field} ]);
         }
         
-        
+        // return $altfield;
         switch ($field) {
             case 'native_place':
                 $field='native_place_id';
@@ -225,7 +256,7 @@ class ProfileController extends Controller
             case 'profession':
                 $field='profession_id';
                 // $profile->profession_id = $request->input('value');
-       
+                break;
             default:
                 $field=$field;
                 break;
@@ -253,8 +284,13 @@ class ProfileController extends Controller
                 break;
             case 'profession':
                 $altvalue=$profile->profession->name;
+                break;
+            case 'married':
+                $altvalue=($profile->married)?'Married':'Single' ;
+                break;
             default:
                 $altvalue=$profile->{$field};
+
                 break;
             }
             // [$field => $profile->{$field}],

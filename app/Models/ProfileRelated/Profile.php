@@ -119,7 +119,7 @@ class Profile extends Model
 
 
         if ($this->cover_photo) {
-            $array['cover_photo'] = $this->cover_photo;
+            $array['cover_photo'] = asset($this->cover_photo);
         } else {
             $array['cover_photo'] = asset('images/1679701536.jpg'); asset('images/avatar/dummy.webp');
         }

@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Village;
+// use App\Models\Village;
+use \App\Models\PlaceRelated\Village;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
@@ -85,7 +86,7 @@ class VillageController extends Controller
         try{
         //    Village::create($request->all()+ ['created_by_id' => $user->id]);
 
-            \App\Models\PlaceRelated\Village::create($request->all()+ ['created_by_id' => $user->id]);
+            Village::create($request->all()+ ['created_by_id' => $user->id]);
 
 
         }catch(\Illuminate\Database\QueryException $e){
