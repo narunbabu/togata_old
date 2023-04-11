@@ -12,7 +12,9 @@ Route::get('/', function () {
     return view('home.index');
 });
 
-Route::get('/images/{filename}', 'ImageController@showImage');
+Route::get('/images/{filename}', 'ImageController@showImage2');
+Route::get('/images/{field}/{filename}', 'ImageController@showImage');
+// Route::get('/images/avatar/{filename}', 'ImageController@showImage');
 // Auth::routes();
 Route::get('/login-register', ['as'=>'login','uses'=> 'App\Http\Controllers\UserController@loginRegister']);
 Route::post('/login', [UserController::class, 'loginRegister']);
