@@ -45,7 +45,7 @@ public function getNewTweets(int $from_tweet_id)
 {   
     $records = Tweet::where('id', '>', $from_tweet_id)
     ->where('type_id', '!=', 3) 
-    ->orderBy('created_at', 'desc')
+    ->orderBy('id', 'desc')
     ->get();
   //Not responseto
   return response()->json(['tweets' => $records]);
@@ -56,7 +56,7 @@ public function getOldTweets(int $from_tweet_id)
 {   
     $records = Tweet::where('id', '<', $from_tweet_id)
     ->where('type_id', '!=', 3) 
-    ->orderBy('created_at', 'desc')
+    ->orderBy('id', 'desc')
     ->get();
   //Not responseto
   return response()->json(['tweets' => $records]);
