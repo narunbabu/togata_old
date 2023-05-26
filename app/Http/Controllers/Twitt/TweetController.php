@@ -35,7 +35,7 @@ class TweetController extends Controller
     $tweets = Tweet::where('type_id','!=',3)
                 // ->orderBy('created_at', 'desc')
                 ->orderBy('id', 'desc')
-               ->take(10)
+               ->take(3)
                ->select()
                ->get();
 
@@ -47,6 +47,7 @@ public function getNewTweets(int $from_tweet_id)
     $records = Tweet::where('id', '>', $from_tweet_id)
     ->where('type_id', '!=', 3) 
     ->orderBy('id', 'desc')
+    ->take(3)
     ->get();
   //Not responseto
   return response()->json(['tweets' => $records]);
@@ -58,6 +59,7 @@ public function getOldTweets(int $from_tweet_id)
     $records = Tweet::where('id', '<', $from_tweet_id)
     ->where('type_id', '!=', 3) 
     ->orderBy('id', 'desc')
+    ->take(3)
     ->get();
   //Not responseto
   return response()->json(['tweets' => $records]);
