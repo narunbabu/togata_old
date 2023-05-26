@@ -38,7 +38,10 @@ class DatabaseSeeder extends Seeder
         TweetTypeSeeder::class,
         TweetsTableSeeder::class,
         ProfessionCategorySeeder::class,
-        ProfileSeeder::class,       
+        ProfileSeeder::class,      
+        SanghamSeeder::class,
+        
+        
        
     ]);
     // Village::factory()->count(20)->create();

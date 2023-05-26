@@ -14,6 +14,7 @@ use App\Http\Controllers\Twitt\RetweetController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserFollowController;
 use App\Http\Controllers\Profile\ProfileController;
+use App\Http\Controllers\SanghamController;
 
 
 Route::prefix('')->group(function () {
@@ -30,9 +31,19 @@ Route::prefix('')->group(function () {
 
 Route::get('/images/{filename}', 'ImageController@showImage');
 
+Route::get('/{action}/soptions', [SanghamController::class, 'handleAction']);
+Route::post('/sangham/new', [SanghamController::class, 'storeNewsangham']);
+Route::get('/sanghams', [SanghamController::class, 'getSanghams']);
+
+Route::post('/member/new', [SanghamController::class, 'storeNewmember']);
+Route::get('/members/{sangh_id}', [SanghamController::class, 'getMembers']);
+
+
 
 Route::apiResource('profile', 'App\Http\Controllers\Profile\ProfileController');
 Route::get('/profession/options', [ProfileController::class, 'getProfession']);
+
+
 Route::get('/{action}/options', [ProfileController::class, 'handleAction']);
 Route::post('/profile/{field}/upload', [ProfileController::class, 'upload']);
 Route::post('/profile/{field}', [ProfileController::class, 'updateField']);
@@ -49,6 +60,7 @@ Route::prefix('tweets')->group(function () {
     Route::post('{tweet}/retweet', [RetweetController::class, 'store']);    
     Route::get('{tweet}/responses', [TweetController::class, 'getResponses']);  
     Route::get('/{id}/new', [TweetController::class, 'getNewTweets']);
+    Route::get('/{id}/old', [TweetController::class, 'getOldTweets']);
     
 });
 

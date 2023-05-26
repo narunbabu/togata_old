@@ -60,6 +60,14 @@ class Profile extends Model
     {
         return $this->belongsTo(AllProfession::class);
     }
+    public function getavatar()
+    {
+        if ($this->avatar) {
+            return asset($this->avatar);
+        } else {
+            return  asset('images/avatar/dummy.webp');
+        }
+    }
     public static function getStatusEnumValues($field)
     {
         // return "SHOW COLUMNS FROM profiles WHERE Field = '{$field}'";
@@ -121,13 +129,10 @@ class Profile extends Model
         if ($this->cover_photo) {
             $array['cover_photo'] = asset($this->cover_photo);
         } else {
-            $array['cover_photo'] = asset('images/1679701536.jpg'); asset('images/avatar/dummy.webp');
+            $array['cover_photo'] = asset('images/1679701536.jpg'); 
+            // asset('images/avatar/dummy.webp');
         }
-        if ($this->avatar) {
-            $array['avatar'] =asset($this->avatar);
-        } else {
-            $array['avatar'] = asset('images/avatar/dummy.webp');
-        }
+        $array['avatar']=$this->getavatar();
 
         // $array['cover_photo'] =asset($this->cover_photo);
         

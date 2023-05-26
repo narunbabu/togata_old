@@ -93,6 +93,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany(Tweet::class, 'mentions');
     }
 
+    // public function getavatar()
+    // {
+    //     $this->profile->
+    //     // if ($this->profile->avatar) {
+    //     //     $array['avatar'] =asset($this->profile->avatar);
+    //     // } else {
+    //     //     $array['avatar'] = asset('images/avatar/dummy.webp');
+    //     // }
+    // }
+
     public function properUser()
     {
         $array = parent::toArray(); 
@@ -101,11 +111,12 @@ class User extends Authenticatable implements JWTSubject
         // } else {
         //     $array['cover_photo'] = asset('images/1679701536.jpg'); asset('images/avatar/dummy.webp');
         // }
-        if ($this->profile->avatar) {
-            $array['avatar'] =asset($this->profile->avatar);
-        } else {
-            $array['avatar'] = asset('images/avatar/dummy.webp');
-        }
+        // if ($this->profile->avatar) {
+        //     $array['avatar'] =asset($this->profile->avatar);
+        // } else {
+        //     $array['avatar'] = asset('images/avatar/dummy.webp');
+        // }
+        $array['avatar']=$this->profile->getavatar();
         return $array;
     }
     

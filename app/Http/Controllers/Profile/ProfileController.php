@@ -231,7 +231,20 @@ class ProfileController extends Controller
         $user = $request->user();
         $profile = $user->profile;
         $altfield=$field;
-        if ($field=='username'){
+        // switch ($field) {
+        //     case 'username':
+        //         $user->{$field} = $request->input('value');
+        //         $user->save();
+        //         return response()->json( [$field =>$user->{$field} ]);
+        //         break;
+        //     case 'name':
+        //         $user->{$field} = $request->input('value');
+        //         $user->save();
+        //         return response()->json( [$field =>$user->{$field} ]);
+        //         break;
+        $strings = array('username', 'name', 'surname');
+
+        if (in_array($field, $strings)){
             $user->{$field} = $request->input('value');
             $user->save();
             return response()->json( [$field =>$user->{$field} ]);

@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             
             ['id'=>1,'surname'=>'Nalamara','name'=>'Arun','username'=>'arun','mobile'=>'8800197778',
             'email'=>'ab@ameyem.com','password'=>bcrypt('ab@123'),'status'=>1,'role_id'=>1,'editing_village_id'=>1],
-            ['id'=>2,'surname'=>'Nalamara','name'=>'Arun','username'=>'arunbabu','mobile'=>'8800197778',
+            ['id'=>2,'surname'=>'Nalamara','name'=>'Vedansh','username'=>'vedansh','mobile'=>'8800197778',
             'email'=>'ab2@ameyem.com','password'=>bcrypt('arun123'),'status'=>1,'role_id'=>1,'editing_village_id'=>1],
 
         ];
