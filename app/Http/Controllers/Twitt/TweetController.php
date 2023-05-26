@@ -33,7 +33,8 @@ class TweetController extends Controller
     public function index()
 {
     $tweets = Tweet::where('type_id','!=',3)
-                ->orderBy('created_at', 'desc')
+                // ->orderBy('created_at', 'desc')
+                ->orderBy('id', 'desc')
                ->take(10)
                ->select()
                ->get();
