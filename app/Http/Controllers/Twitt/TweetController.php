@@ -44,12 +44,18 @@ class TweetController extends Controller
 
 public function getNewTweets(int $from_tweet_id)
 {   
+    // $records = Tweet::where('id', '>', $from_tweet_id)
+    // ->where('type_id', '!=', 3) 
+    // ->take(3)
+    // ->orderBy('id', 'desc')   
+    // ->get();
+
     $records = Tweet::where('id', '>', $from_tweet_id)
-    ->where('type_id', '!=', 3) 
-    ->take(3)
-    ->orderBy('id', 'desc')
-    
-    ->get();
+    ->where('type_id', '!=', 3)
+    ->orderBy('id')
+    ->limit(3)
+    ->get()
+    ->reverse();
   //Not responseto
   return response()->json(['tweets' => $records]);
 
