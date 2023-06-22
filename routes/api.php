@@ -50,7 +50,7 @@ Route::post('/profile/{field}', [ProfileController::class, 'updateField']);
 Route::post('/profession', [ProfileController::class, 'storeNewprofession']);
 
 
-Route::prefix('tweets')->group(function () {
+Route::prefix('tweets')->group(['middleware' => 'jwt.auth'], function () {
     Route::get('/', [TweetController::class, 'index']);
     Route::get('{tweet}', [TweetController::class, 'show']);
     Route::post('/', [TweetController::class, 'store']);
@@ -64,14 +64,22 @@ Route::prefix('tweets')->group(function () {
     
 });
 
-Route::prefix('/users')->group(function () {
+Route::prefix('/users')->group(['middleware' => 'jwt.auth'], function () {
     Route::get('/followers', [UserFollowController::class, 'followers'])->name('followers');
     Route::get('/following', [UserFollowController::class, 'following'])->name('following');
     Route::post('/follow/{user}', [UserFollowController::class, 'follow'])->name('follow');
     Route::post('/unfollow/{user}', [UserFollowController::class, 'unfollow'])->name('unfollow');
 });
 
-Route::prefix('')->group(function () {
+// Route::prefix('')->group(function () {
+//     Route::get('states', [StateMandalController::class, 'fetchState']);
+//     Route::get('districts', [StateMandalController::class, 'fetchDistrict']);
+//     Route::get('mandals', [StateMandalController::class, 'fetchMandal']);
+//     Route::get('villages', [StateMandalController::class, 'fetchVillage']);
+//     Route::post('village', [VillageController::class, 'store']);   
+// });
+
+Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('states', [StateMandalController::class, 'fetchState']);
     Route::get('districts', [StateMandalController::class, 'fetchDistrict']);
     Route::get('mandals', [StateMandalController::class, 'fetchMandal']);
